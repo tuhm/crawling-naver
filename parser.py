@@ -3,7 +3,7 @@ from selenium import webdriver
 from bs4 import BeautifulSoup
 import sys
 
-print("initializing")
+#print("initializing")
 email = ["@naver.com","@gmail.com","@hanmail.net","@daum.net","@hotmail.com","@nate.com"]
 users = []
 
@@ -35,5 +35,6 @@ for i,user in enumerate(users):
 
 user_emails = [ x + y for x in users for y in email]
 
-f = open('target.csv',"w")
+#sys.argv[3] = 'target.csv':: csv_filename
+f = open(sys.argv[3],"w")
 f.write(','.join(user_emails))
