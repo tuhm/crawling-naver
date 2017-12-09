@@ -17,39 +17,47 @@ driver.find_element_by_name('id').send_keys('doctorkitchen')
 driver.find_element_by_name('pw').send_keys('drkitchen1507')
 driver.find_element_by_xpath('//*[@id="frmNIDLogin"]/fieldset/input').click()
 
-url = sys.argv[1]
-pages = int(sys.argv[2])
-#url = "https://cafe.naver.com/ArticleList.nhn?search.clubid=10096425&search.menuid=3&userDisplay=50&search.boardtype=L&search.questionTab=A&search.totalCount=501&search.page="
-#pages = 2
-for i in range(1,pages):
-    print(url+str(i))
-    driver.get(url+str(i))
-    driver.switch_to_frame(driver.find_element_by_name("cafe_main"))
-    web_data = driver.page_source
-#    web_data = urllib.request.urlopen(url+str(i)).read()
-    web_data_soup = BeautifulSoup(web_data, "html.parser")
-    # ids = driver.find_element_by_xpath("//span/@id")
-    ids = web_data_soup.findAll("span", {
-        "id":True,
-        "class": "wordbreak",
-    })
+urls = ["https://cafe.naver.com/dangsamo?iframe_url=/ArticleList.nhn%3Fsearch.clubid=10096425%26search.menuid=3%26userDisplay=50%26search.boardtype=L%26search.questionTab=A%26search.totalCount=501%26search.page=",
+        "http://cafe.naver.com/ArticleList.nhn?search.clubid=14110564&userDisplay=50&search.boardtype=L&search.specialmenutype=&search.questionTab=A&search.totalCount=501&search.page=",
+        "http://cafe.naver.com/ArticleList.nhn?search.clubid=22552330&userDisplay=50&search.boardtype=L&search.specialmenutype=&search.questionTab=A&search.totalCount=501&search.page=",
+        "http://cafe.naver.com/ArticleList.nhn?search.clubid=11345493&userDisplay=50&search.boardtype=L&search.specialmenutype=&search.questionTab=A&search.totalCount=501&search.page=",
+        "http://cafe.naver.com/ArticleList.nhn?search.clubid=16192600&userDisplay=50&search.boardtype=L&search.specialmenutype=&search.questionTab=A&search.totalCount=501&search.page="]
+pages = 3
+filename = ["dangsamo.csv", "gungangnara.csv", "danggab.csv", "haneul.csv", "gungangmi.csv"]
+#url = sys.argv[1]
+#pages = int(sys.argv[2])
 
-    for user in ids:
-        user_id = ''.join(user['id'].split('_')[1:-1])
+for j in range(1,5):
+    url = urls[j]
+    for i in range(1,pages):
+        print(url+str(i))
+        driver.get(url+str(i))
+        driver.switch_to_frame(driver.find_element_by_name("cafe_main"))
+        web_data = driver.page_source
+#       web_data = urllib.request.urlopen(url+str(i)).read()
+        web_data_soup = BeautifulSoup(web_data, "html.parser")
+        # ids = driver.find_element_by_xpath("//span/@id")
+        ids = web_data_soup.findAll("span", {
+            "id":True,
+            "class": "wordbreak",
+        })
 
-#        print(user_id)
+        for user in ids:
+            user_id = ''.join(user['id'].split('_')[1:-1])
 
-        if user_id not in users:
-            users.append(user_id)
+#           print(user_id)
 
-    time.sleep(3)
+            if user_id not in users:
+                users.append(user_id)
 
-user_emails = [ x + y for x in users for y in email]
+        time.sleep(3)
 
-f = open(sys.argv[3],"w")
+    user_emails = [ x + y for x in users for y in email]
+
+    f = open(filename[j],"w")
 #sys.argv[3] = 'target.csv':: csv_filename
 #f = open('treasure.csv',"w")
 
-f.write(',\n'.join(user_emails))
+    f.write(',\n'.join(user_emails))
 
-f.close()
+    f.close()
