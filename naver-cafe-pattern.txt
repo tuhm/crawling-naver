@@ -1,0 +1,23 @@
+http://cafe.naver.com/dangsamo?iframe_url=
+
+cafe.naver.com/ArticleList.nhn?search.clubid=10096425&
+search.menuid=3&
+userDisplay=50&
+search.boardtype=L&
+search.questionTab=A&
+search.totalCount=501&
+search.page=1
+
+cafe.naver.com/ArticleList.nhn?search.clubid=10096425&
+search.menuid=3&
+userDisplay=50&
+search.boardtype=L&
+search.questionTab=A&
+search.totalCount=501&
+search.page=1
+
+
+search.clubid = 당사모 고유 클럽 UID
+search.menuid = 게시판 고유 UID
+userDisplay = 50 개까지 보기
+search.page = 페이지 번호

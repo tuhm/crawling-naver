@@ -37,7 +37,7 @@ for i in range(1,pages):
     for user in ids:
         user_id = ''.join(user['id'].split('_')[1:-1])
 
-        print(user_id)
+#        print(user_id)
 
         if user_id not in users:
             users.append(user_id)
@@ -46,7 +46,7 @@ for i in range(1,pages):
 
 user_emails = [ x + y for x in users for y in email]
 
-f = open('sys.argv[3]',"w")
+f = open(sys.argv[3],"w")
 #sys.argv[3] = 'target.csv':: csv_filename
 #f = open('treasure.csv',"w")
 
