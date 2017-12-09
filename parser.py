@@ -17,10 +17,10 @@ driver.find_element_by_name('id').send_keys('doctorkitchen')
 driver.find_element_by_name('pw').send_keys('drkitchen1507')
 driver.find_element_by_xpath('//*[@id="frmNIDLogin"]/fieldset/input').click()
 
-# url = sys.argv[1]
-# pages = int(sys.argv[2])
-url = "https://cafe.naver.com/ArticleList.nhn?search.clubid=10096425&search.menuid=3&userDisplay=50&search.boardtype=L&search.questionTab=A&search.totalCount=501&search.page="
-pages = 2
+url = sys.argv[1]
+pages = int(sys.argv[2])
+#url = "https://cafe.naver.com/ArticleList.nhn?search.clubid=10096425&search.menuid=3&userDisplay=50&search.boardtype=L&search.questionTab=A&search.totalCount=501&search.page="
+#pages = 2
 for i in range(1,pages):
     print(url+str(i))
     driver.get(url+str(i))
@@ -42,18 +42,13 @@ for i in range(1,pages):
         if user_id not in users:
             users.append(user_id)
 
-    time.sleep(5)
-
-# for i, user in enumerate(users):
-#     u = ''.join(user.split('_')[1:-1])
-#     users[i] = u;
+    time.sleep(3)
 
 user_emails = [ x + y for x in users for y in email]
 
+f = open('sys.argv[3]',"w")
 #sys.argv[3] = 'target.csv':: csv_filename
-# f = open('sys.argv[3]',"w")
-
-f = open('treasure.csv',"w")
+#f = open('treasure.csv',"w")
 
 f.write(',\n'.join(user_emails))
 
