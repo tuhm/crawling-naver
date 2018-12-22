@@ -13,50 +13,51 @@ driver = webdriver.Chrome('/Users/tuhm/Documents/Dr_Kitchen/crawling-naver/chrom
 driver.implicitly_wait(3)
 
 driver.get('https://nid.naver.com/nidlogin.login')
-driver.find_element_by_name('id').send_keys('doctorkitchen')
-driver.find_element_by_name('pw').send_keys('drkitchen1507')
+driver.find_element_by_name('id').send_keys('ketopeople')
+driver.find_element_by_name('pw').send_keys('dkcomm!!')
 driver.find_element_by_xpath('//*[@id="frmNIDLogin"]/fieldset/input').click()
 
-urls = ["https://cafe.naver.com/dangsamo?iframe_url=/ArticleList.nhn%3Fsearch.clubid=10096425%26search.menuid=3%26userDisplay=50%26search.boardtype=L%26search.questionTab=A%26search.totalCount=501%26search.page=",
-        "http://cafe.naver.com/ArticleList.nhn?search.clubid=14110564&userDisplay=50&search.boardtype=L&search.specialmenutype=&search.questionTab=A&search.totalCount=501&search.page=",
-        "http://cafe.naver.com/ArticleList.nhn?search.clubid=22552330&userDisplay=50&search.boardtype=L&search.specialmenutype=&search.questionTab=A&search.totalCount=501&search.page=",
-        "http://cafe.naver.com/ArticleList.nhn?search.clubid=11345493&userDisplay=50&search.boardtype=L&search.specialmenutype=&search.questionTab=A&search.totalCount=501&search.page=",
-        "http://cafe.naver.com/ArticleList.nhn?search.clubid=16192600&userDisplay=50&search.boardtype=L&search.specialmenutype=&search.questionTab=A&search.totalCount=501&search.page="]
-pages = 3
-filename = ["dangsamo.csv", "gungangnara.csv", "danggab.csv", "haneul.csv", "gungangmi.csv"]
-#url = sys.argv[1]
-#pages = int(sys.argv[2])
+urls = ["https://cafe.naver.com/lchfkorea?iframe_url=/ArticleList.nhn%3Fsearch.clubid=28737666%26search.menuid=8%26userDisplay=50%26search.boardtype=L%26search.specialmenutype=%26search.questionTab=A%26search.totalCount=501%26search.page=",
+        "https://cafe.naver.com/lchfkorea?iframe_url=/ArticleList.nhn%3Fsearch.clubid=28737666%26search.menuid=1%26userDisplay=50%26search.boardtype=L%26search.specialmenutype=%26search.questionTab=A%26search.totalCount=501%26search.page=",
+        "https://cafe.naver.com/lchfkorea?iframe_url=/ArticleList.nhn%3Fsearch.clubid=28737666%26search.menuid=1%26userDisplay=50%26search.boardtype=L%26search.specialmenutype=%26search.questionTab=A%26search.totalCount=501%26search.page=",
+        "https://cafe.naver.com/ketogenic?iframe_url=/ArticleList.nhn%3Fsearch.clubid=25217948%26search.menuid=5%26userDisplay=50%26search.boardtype=L%26search.specialmenutype=%26search.questionTab=A%26search.totalCount=501%26search.page=",
+        "https://cafe.naver.com/ketogenic?iframe_url=/ArticleList.nhn%3Fsearch.clubid=25217948%26search.menuid=118%26userDisplay=50%26search.boardtype=L%26search.specialmenutype=%26search.questionTab=A%26search.totalCount=501%26search.page=",
+        "https://cafe.naver.com/ketogenic?iframe_url=/ArticleList.nhn%3Fsearch.clubid=25217948%26search.menuid=56%26userDisplay=50%26search.boardtype=L%26search.specialmenutype=%26search.questionTab=A%26search.totalCount=501%26search.page="]
+#        "https://cafe.naver.com/ketogenic?iframe_url=/ArticleList.nhn%3Fsearch.clubid=25217948%26search.menuid=147%26userDisplay=50%26search.boardtype=L%26search.specialmenutype=%26search.questionTab=A%26search.totalCount=501%26search.page="]
 
-for j in range(1,5):
+pages = 151
+filename = ["keto_free.csv", "keto_qna.csv", "keto_today.csv", "lchf_today.csv", "lchf_free.csv", "lchf_board.csv"]
+#"keto_gongu.csv"
+
+for j in range(len(urls)):
     url = urls[j]
     for i in range(1,pages):
-        print(url+str(i))
+#        print(url+str(i))
         driver.get(url+str(i))
         driver.switch_to_frame(driver.find_element_by_name("cafe_main"))
         web_data = driver.page_source
 #       web_data = urllib.request.urlopen(url+str(i)).read()
         web_data_soup = BeautifulSoup(web_data, "html.parser")
+
         # ids = driver.find_element_by_xpath("//span/@id")
-        ids = web_data_soup.findAll("span", {
-            "id":True,
-            "class": "wordbreak",
+        scr_lst = web_data_soup.findAll("script", {
+            "id":False,
+            "type": "text/javascript",
         })
 
-        for user in ids:
-            user_id = ''.join(user['id'].split('_')[1:-1])
+        for scr in scr_lst:
+            if (scr.get_text()[0:9] == "wordBreak"):
+                tmp = scr.get_text()[13:-1]
+                if (tmp[0:2] != "top"):
+                    user_id = ''.join(tmp.split('_')[1:-1])
 
-#           print(user_id)
+                    if user_id not in users:
+                       users.append(user_id)
 
-            if user_id not in users:
-                users.append(user_id)
-
-        time.sleep(3)
 
     user_emails = [ x + y for x in users for y in email]
 
     f = open(filename[j],"w")
-#sys.argv[3] = 'target.csv':: csv_filename
-#f = open('treasure.csv',"w")
 
     f.write(',\n'.join(user_emails))
 
